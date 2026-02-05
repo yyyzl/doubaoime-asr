@@ -56,7 +56,11 @@ async def demo_transcribe_stream(audio_data: bytes, config: ASRConfig):
             case ResponseType.INTERIM_RESULT:
                 print(f"[中间] {response.text}")
             case ResponseType.FINAL_RESULT:
-                print(f"[最终] {response.text}")
+                # 获取该段文本的起止时间
+                start_time = response.results[0].start_time if response.results else 'N/A'
+                end_time = response.results[0].end_time if response.results else 'N/A'
+
+                print(f"[最终] ({start_time} ~ {end_time}) {response.text}")
             case ResponseType.SESSION_FINISHED:
                 print("[系统] 会话结束")
             case ResponseType.ERROR:
